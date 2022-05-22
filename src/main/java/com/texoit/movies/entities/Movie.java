@@ -14,7 +14,7 @@ public class Movie {
   @Id
   private Long id;
 
-  @Column(name = "RELEASE_YEAR")
+  @Column(name = "NOMINATED_YEAR")
   private Integer year;
 
   private String title;
