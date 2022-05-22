@@ -1,0 +1,1 @@
+CREATE TABLE MOVIE AS SELECT * FROM CSVREAD('classpath:static/movielist.csv',null,'fieldSeparator=;');
