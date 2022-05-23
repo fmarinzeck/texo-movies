@@ -1,5 +1,6 @@
 package com.texoit.movies.controller;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.not;
@@ -36,32 +37,6 @@ class MovieControllerTest {
   @Autowired
   private MovieRepository movieRepository;
 
-//  @MockBean
-//  private MovieRepository movieRepositoryMock;
-
-//  @MockBean
-//  private MovieRepository movieRepositoryMock;
-
-//  @Test
-//  public void get_award_interval_OK() throws Exception {
-//    when(movieServiceMock.getAwardInterval()).thenReturn(AwardIntervalDTOMock.getDefaultAwardInterval());
-//
-//    mockMvc.perform(get("/movie/award-intervals"))
-//        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//        .andExpect(status().isOk())
-//        .andExpect(jsonPath("$.min", isA(List.class)))
-//        .andExpect(jsonPath("$.max", isA(List.class)))
-//        .andExpect(jsonPath("$.min[0].producer", is("Default Min Producer")))
-//        .andExpect(jsonPath("$.min[0].previousWin", is(2020)))
-//        .andExpect(jsonPath("$.min[0].followingWin", is(2021)))
-//        .andExpect(jsonPath("$.min[0].interval", is(1)))
-//        .andExpect(jsonPath("$.max[0].producer", is("Default Max Producer")))
-//        .andExpect(jsonPath("$.max[0].previousWin", is(2010)))
-//        .andExpect(jsonPath("$.max[0].followingWin", is(2020)))
-//        .andExpect(jsonPath("$.max[0].interval", is(10)));
-//
-//    verify(movieServiceMock, times(1)).getAwardInterval();
-//  }
 
   @Test
   public void get_award_interval_all_empty() throws Exception {
@@ -133,14 +108,131 @@ class MovieControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
         .andExpect(jsonPath("$.max", isA(List.class)))
+
         .andExpect(jsonPath("$.min[0].producer", is("Producer 1")))
         .andExpect(jsonPath("$.min[0].previousWin", is(2000)))
         .andExpect(jsonPath("$.min[0].followingWin", is(2001)))
         .andExpect(jsonPath("$.min[0].interval", is(1)))
+
         .andExpect(jsonPath("$.max[0].producer", is("Producer 1")))
         .andExpect(jsonPath("$.max[0].previousWin", is(2000)))
         .andExpect(jsonPath("$.max[0].followingWin", is(2001)))
-        .andExpect(jsonPath("$.max[0].interval", is(1)));
+        .andExpect(jsonPath("$.max[0].interval", is(1)))
+
+        .andExpect(jsonPath("$.min", hasSize(1)))
+        .andExpect(jsonPath("$.max", hasSize(1)));
+  }
+
+  @Test
+  public void get_award_interval_with_min_and_max_distinct() throws Exception {
+    Movie movie1 = MovieLoader.createDefaultMovie(1).year(2000).winner(Boolean.TRUE).build();
+    Movie movie2 = MovieLoader.createDefaultMovie(1).year(2001).winner(Boolean.TRUE).build();
+    Movie movie3 = MovieLoader.createDefaultMovie(2).year(2002).winner(Boolean.TRUE).build();
+    Movie movie4 = MovieLoader.createDefaultMovie(2).year(2004).winner(Boolean.TRUE).build();
+
+    movieRepository.save(movie1);
+    movieRepository.save(movie2);
+    movieRepository.save(movie3);
+    movieRepository.save(movie4);
+
+    mockMvc.perform(get("/movie/award-intervals"))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.min", isA(List.class)))
+        .andExpect(jsonPath("$.max", isA(List.class)))
+        .andExpect(jsonPath("$.min[0].producer", is("Producer 1")))
+        .andExpect(jsonPath("$.min[0].previousWin", is(2000)))
+        .andExpect(jsonPath("$.min[0].followingWin", is(2001)))
+        .andExpect(jsonPath("$.min[0].interval", is(1)))
+
+        .andExpect(jsonPath("$.max[0].producer", is("Producer 2")))
+        .andExpect(jsonPath("$.max[0].previousWin", is(2002)))
+        .andExpect(jsonPath("$.max[0].followingWin", is(2004)))
+        .andExpect(jsonPath("$.max[0].interval", is(2)))
+
+        .andExpect(jsonPath("$.min", hasSize(1)))
+        .andExpect(jsonPath("$.max", hasSize(1)));
+  }
+
+  @Test
+  public void get_award_interval_with_draw_min_value() throws Exception {
+    Movie movie1 = MovieLoader.createDefaultMovie(1).year(2000).winner(Boolean.TRUE).build();
+    Movie movie2 = MovieLoader.createDefaultMovie(1).year(2001).winner(Boolean.TRUE).build();
+    Movie movie3 = MovieLoader.createDefaultMovie(2).year(2002).winner(Boolean.TRUE).build();
+    Movie movie4 = MovieLoader.createDefaultMovie(2).year(2003).winner(Boolean.TRUE).build();
+    Movie movie5 = MovieLoader.createDefaultMovie(3).year(2004).winner(Boolean.TRUE).build();
+    Movie movie6 = MovieLoader.createDefaultMovie(3).year(2010).winner(Boolean.TRUE).build();
+
+    movieRepository.save(movie1);
+    movieRepository.save(movie2);
+    movieRepository.save(movie3);
+    movieRepository.save(movie4);
+    movieRepository.save(movie5);
+    movieRepository.save(movie6);
+
+    mockMvc.perform(get("/movie/award-intervals"))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.min", isA(List.class)))
+        .andExpect(jsonPath("$.max", isA(List.class)))
+        .andExpect(jsonPath("$.min[0].producer", is("Producer 1")))
+        .andExpect(jsonPath("$.min[0].previousWin", is(2000)))
+        .andExpect(jsonPath("$.min[0].followingWin", is(2001)))
+        .andExpect(jsonPath("$.min[0].interval", is(1)))
+
+        .andExpect(jsonPath("$.min[1].producer", is("Producer 2")))
+        .andExpect(jsonPath("$.min[1].previousWin", is(2002)))
+        .andExpect(jsonPath("$.min[1].followingWin", is(2003)))
+        .andExpect(jsonPath("$.min[1].interval", is(1)))
+
+        .andExpect(jsonPath("$.max[0].producer", is("Producer 3")))
+        .andExpect(jsonPath("$.max[0].previousWin", is(2004)))
+        .andExpect(jsonPath("$.max[0].followingWin", is(2010)))
+        .andExpect(jsonPath("$.max[0].interval", is(6)))
+
+        .andExpect(jsonPath("$.min", hasSize(2)))
+        .andExpect(jsonPath("$.max", hasSize(1)));
+  }
+
+  @Test
+  public void get_award_interval_with_draw_max_value() throws Exception {
+    Movie movie1 = MovieLoader.createDefaultMovie(1).year(2000).winner(Boolean.TRUE).build();
+    Movie movie2 = MovieLoader.createDefaultMovie(1).year(2005).winner(Boolean.TRUE).build();
+    Movie movie3 = MovieLoader.createDefaultMovie(2).year(2001).winner(Boolean.TRUE).build();
+    Movie movie4 = MovieLoader.createDefaultMovie(2).year(2006).winner(Boolean.TRUE).build();
+    Movie movie5 = MovieLoader.createDefaultMovie(3).year(2010).winner(Boolean.TRUE).build();
+    Movie movie6 = MovieLoader.createDefaultMovie(3).year(2011).winner(Boolean.TRUE).build();
+
+    movieRepository.save(movie1);
+    movieRepository.save(movie2);
+    movieRepository.save(movie3);
+    movieRepository.save(movie4);
+    movieRepository.save(movie5);
+    movieRepository.save(movie6);
+
+    mockMvc.perform(get("/movie/award-intervals"))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.min", isA(List.class)))
+        .andExpect(jsonPath("$.max", isA(List.class)))
+
+        .andExpect(jsonPath("$.min[0].producer", is("Producer 3")))
+        .andExpect(jsonPath("$.min[0].previousWin", is(2010)))
+        .andExpect(jsonPath("$.min[0].followingWin", is(2011)))
+        .andExpect(jsonPath("$.min[0].interval", is(1)))
+
+        .andExpect(jsonPath("$.max[0].producer", is("Producer 1")))
+        .andExpect(jsonPath("$.max[0].previousWin", is(2000)))
+        .andExpect(jsonPath("$.max[0].followingWin", is(2005)))
+        .andExpect(jsonPath("$.max[0].interval", is(5)))
+
+        .andExpect(jsonPath("$.max[1].producer", is("Producer 2")))
+        .andExpect(jsonPath("$.max[1].previousWin", is(2001)))
+        .andExpect(jsonPath("$.max[1].followingWin", is(2006)))
+        .andExpect(jsonPath("$.max[1].interval", is(5)))
+
+        .andExpect(jsonPath("$.min", hasSize(1)))
+        .andExpect(jsonPath("$.max", hasSize(2)));
   }
 
 
