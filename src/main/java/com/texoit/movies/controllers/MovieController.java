@@ -20,17 +20,10 @@ public class MovieController {
   private MovieService movieService;
 
 
-  @GetMapping(value = "/list")
-  @ResponseBody
-  private ResponseEntity<List<Movie>> listAll() {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(movieService.listAll());
-  }
-
   @GetMapping(value = "/award-intervals")
   @ResponseBody
   private ResponseEntity<AwardIntervalDTO> getAwardIntervals() {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(movieService.getAwardIntervals());
+        .body(movieService.getAwardInterval());
   }
 }
