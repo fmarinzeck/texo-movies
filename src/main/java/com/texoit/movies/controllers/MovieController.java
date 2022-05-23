@@ -3,6 +3,7 @@ package com.texoit.movies.controllers;
 import com.texoit.movies.entities.Movie;
 import com.texoit.movies.repositories.MovieRepository;
 import com.texoit.movies.services.MovieService;
+import com.texoit.movies.view.AwardIntervalView;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,12 @@ public class MovieController {
   private ResponseEntity<List<Movie>> listAll() {
     return ResponseEntity.status(HttpStatus.OK)
         .body(movieService.listAll());
+  }
+
+  @GetMapping(value = "/award-intervals")
+  @ResponseBody
+  private ResponseEntity<AwardIntervalView> getAwardIntervals() {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(movieService.getAwardIntervals());
   }
 }
