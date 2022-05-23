@@ -30,14 +30,6 @@ public class MovieServiceImpl implements MovieService {
     List<ProducerAwardIntervalDTO> producersAwardIntervals = createAwardIntervals(
         loadDistinctWinners);
 
-    producersAwardIntervals.forEach(producerAwardIntervalDTO -> {
-      System.out.println("Producer..: "+producerAwardIntervalDTO.getProducer());
-      System.out.println("Interval..: "+producerAwardIntervalDTO.getInterval());
-      System.out.println("PreviousW.: "+producerAwardIntervalDTO.getPreviousWin());
-      System.out.println("FollowinW.: "+producerAwardIntervalDTO.getFollowingWin());
-      System.out.println("=======================");
-    });
-
     return new AwardIntervalDTO(
         getMinProducerAwardIntervals(producersAwardIntervals),
         getMaxProducerAwardIntervals(producersAwardIntervals)
