@@ -1,0 +1,1 @@
+CREATE TABLE MOVIE("ID" bigint auto_increment, "NOMINATED_YEAR" bigint, "TITLE" varchar(255), "STUDIOS" varchar(255), "PRODUCERS" varchar(255), "WINNER" boolean);
