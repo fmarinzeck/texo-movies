@@ -4,11 +4,8 @@ import com.texoit.movies.entities.Movie;
 import com.texoit.movies.repositories.MovieRepository;
 import com.texoit.movies.services.MovieService;
 import com.texoit.movies.services.ProducerAwardIntervalService;
-import com.texoit.movies.view.AwardIntervalView;
-import com.texoit.movies.view.ProducerAwardIntervalView;
+import com.texoit.movies.dtos.AwardIntervalDTO;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +25,9 @@ public class MovieServiceImpl implements MovieService {
   }
 
   @Override
-  public AwardIntervalView getAwardIntervals() {
+  public AwardIntervalDTO getAwardIntervals() {
     final List<Movie> vencedores = movieRepository.findAllByWinnerIsTrue();
 
-    return new AwardIntervalView(
-        producerAwardIntervalService.getMinProducerAwardIntervals(vencedores),
-        producerAwardIntervalService.getMaxProducerAwardIntervals(vencedores));
+    return producerAwardIntervalService.getAwardInterval(vencedores);
   }
 }

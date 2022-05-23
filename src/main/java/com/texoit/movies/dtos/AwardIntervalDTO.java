@@ -1,4 +1,4 @@
-package com.texoit.movies.view;
+package com.texoit.movies.dtos;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AwardIntervalView {
+public class AwardIntervalDTO {
 
-  private List<ProducerAwardIntervalView> min;
+  private List<ProducerAwardIntervalDTO> min;
 
-  private List<ProducerAwardIntervalView> max;
+  private List<ProducerAwardIntervalDTO> max;
 }
