@@ -74,26 +74,29 @@ public class MovieServiceImpl implements MovieService {
       List<ProducerWinDTO> loadDistinctWinners) {
     List<ProducerAwardIntervalDTO> producersAwardIntervals = new ArrayList<>();
 
-    loadDistinctWinners.forEach(producerWinDTO -> {
+    for (ProducerWinDTO producerWinDTO : loadDistinctWinners) {
       createIntervalToEachProducer(loadDistinctWinners, producersAwardIntervals, producerWinDTO);
-    });
+    }
 
     return producersAwardIntervals;
   }
 
   private void createIntervalToEachProducer(List<ProducerWinDTO> loadDistinctWinners,
       List<ProducerAwardIntervalDTO> producersAwardIntervals, ProducerWinDTO producerWinDTO) {
-    loadDistinctWinners.forEach(producerWinSearch -> {
+
+    for (ProducerWinDTO producerWinSearch : loadDistinctWinners) {
       if (producerWinDTO.getName().equals(producerWinSearch.getName())
-          && producerWinDTO.getYear().compareTo(producerWinSearch.getYear()) != 0) {
+          && producerWinSearch.getYear().compareTo(producerWinDTO.getYear()) > 0) {
+
         ProducerAwardIntervalDTO dto = new ProducerAwardIntervalDTO();
         dto.setProducer(producerWinDTO.getName());
-        dto.setPreviousWin(producerWinSearch.getYear());
-        dto.setFollowingWin(producerWinDTO.getYear());
-        dto.setInterval(producerWinDTO.getYear() - producerWinSearch.getYear());
+        dto.setPreviousWin(producerWinDTO.getYear());
+        dto.setFollowingWin(producerWinSearch.getYear());
+        dto.setInterval(producerWinSearch.getYear() - producerWinDTO.getYear());
         producersAwardIntervals.add(dto);
+        return;
       }
-    });
+    }
   }
 
   private List<ProducerWinDTO> loadDistinctProducerWinDTO(List<Movie> winners) {
