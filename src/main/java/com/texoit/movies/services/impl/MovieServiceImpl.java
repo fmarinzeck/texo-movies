@@ -43,7 +43,8 @@ public class MovieServiceImpl implements MovieService {
     AtomicReference<Integer> minInterval = new AtomicReference<>(99999);
 
     producersAwardIntervals.forEach(producerAwardIntervalDTO -> {
-      if (producerAwardIntervalDTO.getInterval() > 0 && producerAwardIntervalDTO.getInterval() <= minInterval.get()){
+      if (producerAwardIntervalDTO.getInterval() > 0
+          && producerAwardIntervalDTO.getInterval() <= minInterval.get()) {
         allMin.add(producerAwardIntervalDTO);
         minInterval.set(producerAwardIntervalDTO.getInterval());
       }
@@ -59,7 +60,8 @@ public class MovieServiceImpl implements MovieService {
     AtomicReference<Integer> maxInterval = new AtomicReference<>(0);
 
     producersAwardIntervals.forEach(producerAwardIntervalDTO -> {
-      if (producerAwardIntervalDTO.getInterval() > 0 && producerAwardIntervalDTO.getInterval() >= maxInterval.get()){
+      if (producerAwardIntervalDTO.getInterval() > 0
+          && producerAwardIntervalDTO.getInterval() >= maxInterval.get()) {
         allMax.add(producerAwardIntervalDTO);
         maxInterval.set(producerAwardIntervalDTO.getInterval());
       }
@@ -73,25 +75,25 @@ public class MovieServiceImpl implements MovieService {
     List<ProducerAwardIntervalDTO> producersAwardIntervals = new ArrayList<>();
 
     loadDistinctWinners.forEach(producerWinDTO -> {
-      ProducerAwardIntervalDTO producer = producersAwardIntervals.stream()
-          .filter(customer -> producerWinDTO.getName().equals(customer.getProducer()))
-          .findAny()
-          .orElse(null);
-
-      if (producer == null) {
-        ProducerAwardIntervalDTO dto = new ProducerAwardIntervalDTO();
-        dto.setProducer(producerWinDTO.getName());
-        dto.setPreviousWin(producerWinDTO.getYear());
-        dto.setInterval(0);
-
-        producersAwardIntervals.add(dto);
-      } else {
-        producer.setInterval(producerWinDTO.getYear() - producer.getPreviousWin());
-        producer.setFollowingWin(producerWinDTO.getYear());
-      }
+      createIntervalToEachProducer(loadDistinctWinners, producersAwardIntervals, producerWinDTO);
     });
 
     return producersAwardIntervals;
+  }
+
+  private void createIntervalToEachProducer(List<ProducerWinDTO> loadDistinctWinners,
+      List<ProducerAwardIntervalDTO> producersAwardIntervals, ProducerWinDTO producerWinDTO) {
+    loadDistinctWinners.forEach(producerWinSearch -> {
+      if (producerWinDTO.getName().equals(producerWinSearch.getName())
+          && producerWinDTO.getYear().compareTo(producerWinSearch.getYear()) != 0) {
+        ProducerAwardIntervalDTO dto = new ProducerAwardIntervalDTO();
+        dto.setProducer(producerWinDTO.getName());
+        dto.setPreviousWin(producerWinSearch.getYear());
+        dto.setFollowingWin(producerWinDTO.getYear());
+        dto.setInterval(producerWinDTO.getYear() - producerWinSearch.getYear());
+        producersAwardIntervals.add(dto);
+      }
+    });
   }
 
   private List<ProducerWinDTO> loadDistinctProducerWinDTO(List<Movie> winners) {
