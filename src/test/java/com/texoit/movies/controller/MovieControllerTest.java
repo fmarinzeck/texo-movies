@@ -39,7 +39,7 @@ class MovieControllerTest {
 
   @Test
   public void get_award_interval_all_empty() throws Exception {
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -60,7 +60,7 @@ class MovieControllerTest {
     movieRepository.save(movie3);
     movieRepository.save(movie4);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -81,7 +81,7 @@ class MovieControllerTest {
     movieRepository.save(movie3);
     movieRepository.save(movie4);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -102,7 +102,7 @@ class MovieControllerTest {
     movieRepository.save(movie3);
     movieRepository.save(movie4);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -134,7 +134,7 @@ class MovieControllerTest {
     movieRepository.save(movie3);
     movieRepository.save(movie4);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -169,7 +169,7 @@ class MovieControllerTest {
     movieRepository.save(movie5);
     movieRepository.save(movie6);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -209,7 +209,7 @@ class MovieControllerTest {
     movieRepository.save(movie5);
     movieRepository.save(movie6);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -245,7 +245,7 @@ class MovieControllerTest {
     movieRepository.save(movie2);
     movieRepository.save(movie3);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -282,7 +282,7 @@ class MovieControllerTest {
     movieRepository.save(movie5);
     movieRepository.save(movie6);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
@@ -319,7 +319,7 @@ class MovieControllerTest {
     movieRepository.save(movie5);
     movieRepository.save(movie6);
 
-    mockMvc.perform(get("/movie/award-intervals"))
+    mockMvc.perform(get("/movies/award-intervals"))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.min", isA(List.class)))
