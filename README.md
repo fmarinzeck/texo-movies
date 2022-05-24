@@ -34,7 +34,7 @@ In this way this API will consider that John received <b>two indications</b> and
 Only one endpoint was created that returns the highest and lowest range of a winning producer (as required). 
 
 HTTP GET:
-```http request
+```http
 http://localhost:8080/movies/award-intervals
 ```
 Returns the producer with the longest gap between two consecutive awards, and the one with the fastest two awards.
