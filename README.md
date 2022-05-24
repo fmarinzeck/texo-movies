@@ -1,42 +1,90 @@
-# texo-movies
-RESTful API to read the list of nominees and winners in the Worst Film category at the Golden Raspberry Awards.
+# Texo Movies - API General Purpose
+RESTful API created for the purpose of custom listing the winners of the Worst Film category of the Golden Raspberry Awards.
 
-Objetivo Geral da API
-API RESTful criada com o objetivo de listar de maneira personalizada os vencedores da categoria Pior Filme do Golden Raspberry Awards.
-Principais Recursos Utilizados
-•	Utilização de Spring Boot e Tomcat como servidor de aplicação;
-•	Maven para gerenciamento das dependências;
-•	A chamada REST disponibilizada está enquadrada no Nível 2 do modelo de maturidade de Leonard Richardson;
-•	As respostas são disponibilizadas no formato JSON;
-•	A aplicação possui alguns DTOs (Data Transfer Object) utilizados para processamento e comunicação de resposta;
-•	O biblioteca lombok foi utilizada visando aumentar a praticidade e diminuindo a quantidade de código.
-•	Foi utilizado o banco de dados H2 para armazenamento das informações. Vale ressaltar que este banco de dados trabalha com base na memória do computador e com isso os dados são perdidos ao finalizar a aplicação.
-•	Conforme solicitado ao iniciar a aplicação ocorre o carregamento automático de algumas informações contidas em um arquivo CSV (mais detalhes logo abaixo).
-•	Visando mais precisão e dinamismo, os testes foram realizados com uma base de dados ‘limpa’ onde para cada cenário são inseridos registros específicos.
-Observação Importante sobre o requisito abaixo:
-Obter o produtor com maior intervalo entre dois prêmios consecutivos, e o que obteve dois prêmios mais rápido.
-Para resolver este requisito esta API leva em consideração cada um dos produtores mesmo que o filme tenha sido produzido em conjunto, ou seja:
-O produtor John foi indicado sozinho no ano 2000 e no ano seguinte ele é indicado novamente, porém dessa vez o filme foi produzido em conjunto com o produtor Bruce.
-Dessa maneira esta API irá considerar que John recebeu duas indicações e irá processar o resultado com base nessa premissa, exatamente conforme solicitado no requisito.
-Importando projeto
-•	Abra/importe o projeto como um projeto maven
-•	Importe todas as dependências do pom.xml
-•	Execute o projeto normalmente
-o	Se precisar fazer isso normalmente, basta fazê-lo através da classe: com.texoit.movies.MoviesApplication.java
+## Main Resources Used
+* Spring Boot and Tomcat as an application server;
+* Maven for dependency management;
+* The available REST call is framed in Level 2 of Leonard Richardson's maturity model;
+* Responses are provided in JSON format;
+* The application has some DTOs (Data Transfer Object) used for response processing and communication;
+* The lombok library was used to increase practicality and reduce the amount of code.
+* The H2 database was used to store the information. It is worth mentioning that this database works based on the computer's memory and therefore data is lost when the application ends.
+* As requested when starting the application, some information contained in a CSV file is automatically loaded.
+* To get more precision and dynamism, the tests were made with a 'clean' database where specific records are inserted for each scenario.
 
-Endpoints
-Visando facilitar a avaliação deste teste, foi criado somente um endpoint que retorna o maior e o menor intervalo de um produtor vencedor (conforme requisito).
-HTTP GET: http://localhost:8080/movies/award-intervals
-Retorna o produtor com maior intervalo entre dois prêmios consecutivos, e o que obteve dois prêmios mais rápido.
-{"min":[{"producer":"Joel Silver","interval":1,"previousWin":1990,"followingWin":1991}],"max":[{"producer":"Matthew Vaughn","interval":13,"previousWin":2002,"followingWin":2015}]}
+## Important note about the requirement below:
+<i>"Get the producer with the longest gap between two consecutive awards, and the one with the fastest two awards."</i>
 
-Carregamento Inicial
-O carregamento inicial é feito através do arquivo src/main/resources/static/movielist.csv
-Caso seja necessário carregar outros dados basta substituir o conteúdo deste arquivo que eles serão automaticamente carregados quando o sistema for executado.
-Vale lembrar que deve ser respeitada a estrutura previamente estabelecida conforme linha abaixo:
-year;title;studios;producers;winner
-Testes de integração
-Os testes de integração foram realizados com objetivo de que todas as camadas da aplicação fossem validadas, dessa maneira optou-se por utilizar uma base de dados limpa (sem informações) onde as informações seriam criadas e processadas de acordo com cada cenário de teste.
-Ou seja, NÃO foram utilizados mockups (dados falsos). Cada teste produz seu dado, grava no banco de dados e a partir daí e chamado o endpoint que passará por todas as camadas do sistema (controller, service, repositor e DB) e retornará o resultado.
-E aí sim, finalmente com base nesse resultado é que são feitas as validações.
-Todos os testes estão disponíveis na classe src.test.java.com.texoit.movies.controller.MovieControllerTest
+To solve this requirement, this API takes each of the producers even if the film was produced together, example:
+
+* Producer John was nominated alone in the year 2000 and the following year he is nominated again, but this time the film was produced in conjunction with producer Bruce.
+
+In this way this API will consider that John received <b>two indications</b> and will process the result based on that premise, <b>exactly</b> as requested in the requirement.
+
+## importing project
+* Open/import the project as a maven project
+* Import all pom.xml dependencies
+* Run the project normally
+  * If you need to do this manually, just do it in the class: 
+```java
+  com.texoit.movies.MoviesApplication.java
+  ```
+
+## Endpoints
+Only one endpoint was created that returns the highest and lowest range of a winning producer (as required). 
+
+HTTP GET:
+```http request
+http://localhost:8080/movies/award-intervals
+```
+Returns the producer with the longest gap between two consecutive awards, and the one with the fastest two awards.
+Example of response:
+
+```JSON
+{
+  "min":[
+    {
+      "producer":"Joel Silver",
+      "interval":1,
+      "previousWin":1990,
+      "followingWin":1991
+    }
+  ],
+  "max":[
+    {
+      "producer":"Matthew Vaughn",
+      "interval":13,
+      "previousWin":2002,
+      "followingWin":2015
+    }
+  ]
+}
+```
+
+## Initial Load
+Initial loading is done via the file in:
+```bash
+src/main/resources/static/movielist.csv
+```
+
+If it is necessary to load other data, just replace the contents of this file and they will be automatically loaded when the system is executed.
+
+* It is worth remembering that the previously established structure must be respected according to the line below:
+
+     <b>year;title;studios;producers;winner</b>
+
+## Integration tests
+The integration tests were made with the objective that all layers of the application were validated, to do that, was decided to use a clean database (without information) and all data would be created and processed according to each test scenario. 
+
+That is, mockups (fake data) were <b>NOT</b> used.
+
+Each test produces its data, writes it to the database and from there, the endpoint is called, which will go through all the layers of the system (controller, service, repository and DB) and return the result.
+And then, finally, based on this result, the validations are carried out.
+
+All tests are available in the file:
+```java
+src.test.java.com.texoit.movies.controller.MovieControllerTest.java
+```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
